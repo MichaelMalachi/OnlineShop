@@ -1,0 +1,39 @@
+{% extends 'base.html'%}
+{% block style_content %}
+<style>
+.left-block {
+
+    float: left;
+    width: 200px;
+    height: 500px;
+    margin-left: 360px;
+    margin-top: 3px;
+}
+
+.right-block {
+
+    float: right;
+    width: 570px;
+    height: 500px;
+    margin-right: 360px;
+
+    margin-top: -5px;
+}
+
+</style>
+{% endblock %}
+
+{% block main_content %}
+
+<div class="left-block">
+    <img src="https://newsib.net/wp-content/uploads/2022/12/%D1%88%D0%BE%D0%BA-%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BD%D1%82.jpeg"
+         class="card-img-top" alt="...">
+</div>
+<div class="right-block">
+    <h5 class="card-title">{{object.name}}</h5>
+    <h5 class="card-title">{{object.description}}</h5>
+    <h5 class="card-title">{{object.price}}</h5>
+    <a href="#" class="btn btn-primary">Add to basket</a>
+</div>
+
+{% endblock %}

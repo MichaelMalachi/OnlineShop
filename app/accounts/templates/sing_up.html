@@ -1,0 +1,15 @@
+
+{% extends 'base.html'%}
+
+
+{% block main_content %}
+Sing_up
+
+<form method="post">
+
+{% csrf_token%}
+    {{form.as_p}}
+
+<button type="submit">Submit</button>
+</form>
+{% endblock %}
