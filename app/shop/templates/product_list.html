@@ -9,12 +9,12 @@
 
     <div class="col" >
         <div class="card">
-            <img src="https://newsib.net/wp-content/uploads/2022/12/%D1%88%D0%BE%D0%BA-%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BD%D1%82.jpeg"
+            <img src="{{ product.image.url }}"
                  class="card-img-top" alt="...">
             <div class="card-body">
                 <h5 class="card-title">{{product.name}}</h5>
                 <h5 class="card-title">{{product.price}} ₴</h5>
-                <a href="{% url 'details-products-link' pk=product.pk %}" class="btn btn-primary">Details</a>
+                <a href="{% url 'shop:details-products-link' pk=product.pk %}" class="btn btn-primary">Details</a>
 
 
             </div>

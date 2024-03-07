@@ -5,11 +5,12 @@ from accounts.views import ActivateView
 
 
 
+
 app_name = 'accounts'
 
 urlpatterns = [
     path('my-profile/<int:pk>', MyProfileView.as_view(), name='my-profile-link'),
     path('sing-up/', SingUpView.as_view(), name='sing-up-link'),
-    path('activate/<uuid:username>/', ActivateView.as_view(), name='activate-link'),
-    path('', include('django.contrib.auth.urls')),
+    path('activate/<uuid:username>', ActivateView.as_view(), name='activate-link'),
+
 ]

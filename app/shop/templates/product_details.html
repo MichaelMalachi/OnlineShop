@@ -26,14 +26,18 @@
 {% block main_content %}
 
 <div class="left-block">
-    <img src="https://newsib.net/wp-content/uploads/2022/12/%D1%88%D0%BE%D0%BA-%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BD%D1%82.jpeg"
+    <img src="{{ object.image.url }}"
          class="card-img-top" alt="...">
 </div>
 <div class="right-block">
     <h5 class="card-title">{{object.name}}</h5>
     <h5 class="card-title">{{object.description}}</h5>
     <h5 class="card-title">{{object.price}}</h5>
-    <a href="#" class="btn btn-primary">Add to basket</a>
+    {% if request.user.is_authenticated  %}
+    <a href="{% url 'shop:add_to_cart' product_id=object.id %}" class="btn btn-primary">Add to basket</a>
+    {% else %}
+    <a class="btn btn-link" href="{% url 'accounts:sing-up-link' %}">SingUp</a>
+    {% endif %}
 </div>
 
 {% endblock %}

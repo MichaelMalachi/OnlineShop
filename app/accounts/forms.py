@@ -4,7 +4,7 @@ from django import forms
 
 
 import settings.settings
-from django.contrib.auth.models import User
+from accounts.models import OnlineShopUser
 from accounts.tasks import activate_email
 
 
@@ -13,7 +13,7 @@ class SignUpForm(forms.ModelForm):
     password2 = forms.CharField(widget=forms.PasswordInput())
 
     class Meta:
-        model = User
+        model = OnlineShopUser
         fields = (
             'email',
             'username',
@@ -39,7 +39,7 @@ class SignUpForm(forms.ModelForm):
         activate_email(
             # f'http://localhost:8000/{reverse("accounts:activate-user",instance.username)},
             f'{settings.settings.HTTP_SCHEMA}://{settings.settings.DOMAIN}/'
-            f'accounts/activate/{instance.username}',
+            f'activate/{instance.username}',
             instance.email
         )
 

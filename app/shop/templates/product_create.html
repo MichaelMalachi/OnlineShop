@@ -2,9 +2,9 @@
 
 {% block main_content %}
 <div class="container text-center">
-    <form method="post">
+    <form method="post"  action="{% url 'shop:create-product-link' %}" enctype="multipart/form-data">
         {% csrf_token %}
-        <input type="hidden" name="csrfmiddlewaretoken" value="FfaYTWSz762QKgCnEl5NV3z8OJF1MsHAFdAFrEqF7fPUgbelumc0TTK9ly9TG0zz">
+
 
         <div class="row">
             <div class="col-md-6 offset-md-3">
