@@ -20,6 +20,8 @@
     margin-top: -5px;
 }
 
+
+
 </style>
 {% endblock %}
 
@@ -33,11 +35,18 @@
     <h5 class="card-title">{{object.name}}</h5>
     <h5 class="card-title">{{object.description}}</h5>
     <h5 class="card-title">{{object.price}}</h5>
-    {% if request.user.is_authenticated  %}
-    <a href="{% url 'shop:add_to_cart' product_id=object.id %}" class="btn btn-primary">Add to basket</a>
-    {% else %}
-    <a class="btn btn-link" href="{% url 'accounts:sing-up-link' %}">SingUp</a>
-    {% endif %}
+
+    <form method="post" action="{% url 'shop:add_to_cart' %}">
+        {% csrf_token %}
+        <!-- Добавьте поле для ввода количества товара -->
+        <input type="number" name="quantity" value="1" min="0">
+        <!-- Добавьте скрытое поле для передачи идентификатора товара -->
+        <input type="hidden" name="product_id" value="{{ object.id }}">
+        <!-- Добавьте кнопку для добавления товара в корзину -->
+        <button type="submit" class="btn btn-primary">Add to basket</button>
+    </form>
+
+
 </div>
 
 {% endblock %}

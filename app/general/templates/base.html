@@ -26,6 +26,12 @@
         </li>
         {% endif %}
 
+
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'shop:cart' %}">Cart</a>
+        </li>
+
+
     </ul>
 
     <div class="ml-auto">
@@ -42,19 +48,11 @@
             {% csrf_token %}
             <button type="submit" class="btn btn-warning">Logout</button>
         </form>
-            <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'shop:cart' %}">
-                Buy
-            </a>
-        </li>
-    </ul>
+
         {% endif %}
     </div>
 
-
 </nav>
-
 
 {% block main_content %}
 {% endblock %}

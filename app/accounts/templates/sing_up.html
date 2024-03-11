@@ -1,4 +1,3 @@
-
 {% extends 'base.html'%}
 
 
@@ -7,9 +6,9 @@ Sing_up
 
 <form method="post">
 
-{% csrf_token%}
+    {% csrf_token%}
     {{form.as_p}}
 
-<button type="submit">Submit</button>
+    <button type="submit">Submit</button>
 </form>
 {% endblock %}

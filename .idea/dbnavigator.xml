@@ -20,12 +20,16 @@
     <last-used-providers />
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files>
-      <object connection-id="6b8df1df-94a9-4ad1-b26f-5a7d9d6f9abe" object-ref="schemas/public/tables/accounts_onlineshopuser" />
-    </open-files>
+    <open-files />
   </component>
   <component name="DBNavigator.Project.DatasetFilterManager">
+    <filter-actions connection-id="6b8df1df-94a9-4ad1-b26f-5a7d9d6f9abe" dataset="public.shop_cart_product_name" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="6b8df1df-94a9-4ad1-b26f-5a7d9d6f9abe" dataset="public.shop_products" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="6b8df1df-94a9-4ad1-b26f-5a7d9d6f9abe" dataset="public.accounts_onlineshopuser" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="6b8df1df-94a9-4ad1-b26f-5a7d9d6f9abe" dataset="public.shop_customuser" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="6b8df1df-94a9-4ad1-b26f-5a7d9d6f9abe" dataset="public.accounts_onlineshopuser_groups" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="6b8df1df-94a9-4ad1-b26f-5a7d9d6f9abe" dataset="public.shop_cartitem" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="6b8df1df-94a9-4ad1-b26f-5a7d9d6f9abe" dataset="public.shop_cart" active-filter-id="EMPTY_FILTER" />
   </component>
   <component name="DBNavigator.Project.ExecutionManager">
     <retain-sticky-names value="false" />

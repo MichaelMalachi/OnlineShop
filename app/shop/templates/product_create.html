@@ -2,7 +2,7 @@
 
 {% block main_content %}
 <div class="container text-center">
-    <form method="post"  action="{% url 'shop:create-product-link' %}" enctype="multipart/form-data">
+    <form method="post" action="{% url 'shop:create-product-link' %}" enctype="multipart/form-data">
         {% csrf_token %}
 
 
@@ -19,7 +19,8 @@
             <div class="col-md-6 offset-md-3">
                 <p>
                     <label for="id_description">Description:</label>
-                    <input type="text" name="description" maxlength="50" required id="id_description" class="form-control">
+                    <input type="text" name="description" maxlength="50" required id="id_description"
+                           class="form-control">
                 </p>
             </div>
         </div>

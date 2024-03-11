@@ -1,6 +1,5 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-import uuid
 
 
 class OnlineShopUser(AbstractUser):
@@ -22,4 +21,4 @@ class OnlineShopUser(AbstractUser):
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must have is_superuser=True.')
 
-        return self._create_user(email, password,username, **extra_fields)
+        return self._create_user(email, password, username, **extra_fields)

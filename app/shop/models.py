@@ -1,6 +1,7 @@
 from django.db import models
 from accounts.models import OnlineShopUser
 
+
 class Products(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=50)
@@ -8,8 +9,17 @@ class Products(models.Model):
     image = models.ImageField(upload_to='images/')
 
 
-
 class Cart(models.Model):
     user_name = models.ForeignKey(OnlineShopUser, on_delete=models.CASCADE)
-    product_name = models.ManyToManyField(Products)
+    product_name = models.ManyToManyField(Products, through='CartItem')
 
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    product = models.ForeignKey(Products, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+
+
+class CustomUser(models.Model):
+    user_id = models.CharField(max_length=100, unique=True)
+    cart = models.OneToOneField(Cart, on_delete=models.CASCADE)

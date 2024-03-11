@@ -19,5 +19,3 @@ def activate_email(activation_link, email_to):
         [email_to],
         fail_silently=False,
     )
-
-

@@ -1,8 +1,5 @@
 import uuid
-
 from django import forms
-
-
 import settings.settings
 from accounts.models import OnlineShopUser
 from accounts.tasks import activate_email
@@ -34,10 +31,7 @@ class SignUpForm(forms.ModelForm):
         instance.username = str(uuid.uuid4())
         instance.set_password(self.cleaned_data["password1"])
 
-        from django.urls import reverse
-
         activate_email(
-            # f'http://localhost:8000/{reverse("accounts:activate-user",instance.username)},
             f'{settings.settings.HTTP_SCHEMA}://{settings.settings.DOMAIN}/'
             f'activate/{instance.username}',
             instance.email
@@ -49,6 +43,3 @@ class SignUpForm(forms.ModelForm):
             instance.save()
 
         return instance
-
-
-
