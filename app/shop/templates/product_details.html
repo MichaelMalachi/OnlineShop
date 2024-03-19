@@ -35,7 +35,7 @@
     <h5 class="card-title">{{object.name}}</h5>
     <h5 class="card-title">{{object.description}}</h5>
     <h5 class="card-title">{{object.price}}</h5>
-
+    {% if request.user.is_authenticated %}
     <form method="post" action="{% url 'shop:add_to_cart' %}">
         {% csrf_token %}
         <!-- Добавьте поле для ввода количества товара -->
@@ -45,6 +45,17 @@
         <!-- Добавьте кнопку для добавления товара в корзину -->
         <button type="submit" class="btn btn-primary">Add to basket</button>
     </form>
+    {% else %}
+        <form method="post" action="{% url 'shop:add_to_cart_AnonymousUser' %}">
+        {% csrf_token %}
+        <!-- Добавьте поле для ввода количества товара -->
+        <input type="number" name="quantity" value="1" min="0">
+        <!-- Добавьте скрытое поле для передачи идентификатора товара -->
+        <input type="hidden" name="product_id" value="{{ object.id }}">
+        <!-- Добавьте кнопку для добавления товара в корзину -->
+        <button type="submit" class="btn btn-primary">Add to basket as Anonymous User</button>
+    </form>
+     {% endif %}
 
 
 </div>

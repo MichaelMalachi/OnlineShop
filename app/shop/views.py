@@ -4,11 +4,10 @@ from django.views.generic import DetailView
 from django.urls import reverse_lazy
 from shop.product_form import Product_form_for_create
 from django.http import HttpResponseBadRequest
-from .models import Cart, Products
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, get_object_or_404
-from shop.models import CartItem
+from django.shortcuts import get_object_or_404, redirect
+from .models import Cart, CartItem, Products
 
 
 class ShopCreateView(CreateView):
@@ -48,6 +47,28 @@ def add_to_cart(request):
         return HttpResponseBadRequest("Only POST method is allowed.")
 
 
+def add_to_cart_AnonymousUser(request):
+    if request.method == 'POST':
+        product_id = request.POST.get('product_id')
+        quantity = request.POST.get('quantity')
+        if product_id and quantity:
+            product = get_object_or_404(Products, pk=product_id)
+            if 'cart' not in request.session:
+                request.session['cart'] = {}
+            cart = request.session['cart']
+            if product_id in cart:
+                cart[product_id] += int(quantity)
+            else:
+                cart[product_id] = int(quantity)
+            request.session.modified = True
+            return redirect('home-link')
+        else:
+            return HttpResponseBadRequest("Product ID and quantity are required.")
+    else:
+        return HttpResponseBadRequest("Only POST method is allowed.")
+
+
+@login_required
 def view_cart(request):
     cart_items = CartItem.objects.filter(cart__user_name=request.user if request.user.is_authenticated else None)
     total_price = 0
@@ -63,8 +84,40 @@ def view_cart(request):
     return render(request, 'cart.html', context)
 
 
+def view_cart_AnonymousUser(request):
+    if 'cart' in request.session:
+        cart_items = []
+        total_price = 0
+        total_quantity = 0
+
+        for product_id, quantity in request.session['cart'].items():
+            product = get_object_or_404(Products, pk=product_id)
+            total_price += product.price * quantity
+            total_quantity += quantity
+            cart_items.append({'product': product, 'quantity': quantity})
+
+        context = {
+            'cart_items': cart_items,
+            'total_price': total_price,
+            'total_quantity': total_quantity
+        }
+    else:
+        context = {'cart_items': [], 'total_price': 0, 'total_quantity': 0}
+
+    return render(request, 'cart.html', context)
+
+
 @login_required
 def remove_from_cart(request, cart_item_id):
     cart_item = get_object_or_404(CartItem, id=cart_item_id)
     cart_item.delete()
     return redirect('shop:cart')
+
+
+def remove_from_cart_AnonymousUser(request, cart_item_id):
+    if 'cart' in request.session:
+        cart = request.session['cart']
+        if str(cart_item_id) in cart:
+            del cart[str(cart_item_id)]
+            request.session.modified = True
+    return redirect('shop:cart_AnonymousUser')

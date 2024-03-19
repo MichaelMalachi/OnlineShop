@@ -20,17 +20,32 @@
             <td>{{ cart_item.product.description }}</td>
             <td>${{ cart_item.product.price }}</td>
             <td>{{ cart_item.quantity }}</td>
+            {% if request.user.is_authenticated %}
             <td>
                 <form action="{% url 'shop:remove_from_cart' cart_item.id %}" method="post">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-danger">Remove</button>
                 </form>
             </td>
+            {% else %}
+            <td>
+                <form action="{% url 'shop:remove_from_cart_AnonymousUser' cart_item.product.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Remove Anonymous User</button>
+                </form>
+            </td>
+            {% endif %}
+
         </tr>
         {% endfor %}
         </tbody>
     </table>
     <h2>Total Price: ${{ total_price }}</h2>
     <h2>Total Quantity: {{ total_quantity }}</h2>
+    {% if request.user.is_authenticated %}
+    <a class="btn btn-link" href="#">Buy</a>
+    {% else %}
+    <a class="btn btn-link" href="{% url 'accounts:sing-up-link' %}">SingUp</a>
+    {% endif %}
 </div>
 {% endblock %}
