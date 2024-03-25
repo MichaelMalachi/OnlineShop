@@ -8,6 +8,7 @@ class Product_form_for_create(forms.ModelForm):
         fields = (
             'name',
             'description',
+            'car_brand',
             'price',
             'image',
         )

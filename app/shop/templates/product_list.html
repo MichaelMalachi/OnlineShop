@@ -1,27 +1,50 @@
-{% extends 'base.html'%}
-
+{% extends 'base.html' %}
 
 {% block main_content %}
 
-
-<div class="row row-cols-1 row-cols-md-5 g-4">
-    {%for product in products_list %}
-
-    <div class="col">
-        <div class="card">
-            <img src="{{ product.image.url }}"
-                 class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">{{product.name}}</h5>
-                <h5 class="card-title">{{product.price}} ₴</h5>
-                <a href="{% url 'shop:details-products-link' pk=product.pk %}" class="btn btn-primary">Details</a>
-
-
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h4>Filter by Car Brand:</h4>
+            <div class="btn-group" role="group" aria-label="Car Brands">
+                <button type="button" class="btn btn-secondary" onclick="filterProducts('')">All</button>
+                {% for brand in car_brands %}
+                <button type="button" class="btn btn-secondary" onclick="filterProducts('{{ brand }}')">{{ brand }}</button>
+                {% endfor %}
             </div>
         </div>
     </div>
-
-
-    {%endfor%}
 </div>
+
+<div class="row row-cols-1 row-cols-md-5 g-4" id="product-list">
+    {% for product in products_list %}
+    <div class="col" data-brand="{{ product.car_brand }}">
+        <div class="card">
+            <img src="{{ product.image.url }}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">{{ product.name }}</h5>
+                <h5 class="card-title">{{ product.price }} ₴</h5>
+                <a href="{% url 'shop:details-products-link' pk=product.pk %}" class="btn btn-primary">Details</a>
+                {% if request.user.is_superuser %}
+                <a href="{% url 'shop:delete-product' pk=product.pk %}" class="btn btn-danger">Delete</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+    function filterProducts(brand) {
+        var products = document.querySelectorAll('#product-list .col');
+        products.forEach(function(product) {
+            if (brand === '' || product.getAttribute('data-brand') === brand) {
+                product.style.display = 'block';
+            } else {
+                product.style.display = 'none';
+            }
+        });
+    }
+</script>
+
 {% endblock %}

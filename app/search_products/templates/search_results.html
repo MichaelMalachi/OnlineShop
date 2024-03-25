@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+1234
+<div class="row row-cols-1 row-cols-md-5 g-4" id="product-list">
+    {% for product in products %}
+    <div class="col" data-brand="{{ product.car_brand }}">
+        <div class="card">
+            <img src="{{ product.image.url }}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">{{ product.name }}</h5>
+                <h5 class="card-title">{{ product.price }} ₴</h5>
+                <a href="{% url 'shop:details-products-link' pk=product.pk %}" class="btn btn-primary">Details</a>
+                {% if request.user.is_superuser %}
+                <a href="{% url 'shop:delete-product' pk=product.pk %}" class="btn btn-danger">Delete</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

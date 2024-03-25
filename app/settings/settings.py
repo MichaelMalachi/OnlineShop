@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'general',
     'accounts',
     'shop',
+    'search_products',
 ]
 
 MIDDLEWARE = [
@@ -130,8 +131,8 @@ LOGOUT_REDIRECT_URL = reverse_lazy('home-link')
 HTTP_SCHEMA = 'http'
 DOMAIN = "localhost:8000"
 
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587

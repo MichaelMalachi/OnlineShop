@@ -1,4 +1,5 @@
 from django.views.generic import CreateView
+from django.views.generic import DeleteView
 from django.views.generic import ListView
 from django.views.generic import DetailView
 from django.urls import reverse_lazy
@@ -21,12 +22,20 @@ class ShopListView(ListView):
     model = Products
     template_name = 'product_list.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['car_brands'] = Products.objects.values_list('car_brand', flat=True).distinct()
+        return context
+
 
 class ShopDetailsView(DetailView):
     model = Products
     template_name = 'product_details.html'
 
-
+class ProductDeleteView(DeleteView):
+    model = Products
+    success_url = reverse_lazy('shop:list-products-link')
+    template_name = 'products_confirm_delete.html'
 @login_required
 def add_to_cart(request):
     if request.method == 'POST':
@@ -121,3 +130,5 @@ def remove_from_cart_AnonymousUser(request, cart_item_id):
             del cart[str(cart_item_id)]
             request.session.modified = True
     return redirect('shop:cart_AnonymousUser')
+
+

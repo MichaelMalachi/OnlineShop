@@ -30,12 +30,21 @@
         <li class="nav-item">
             <a class="nav-link" href="{% url 'shop:cart' %}">Cart</a>
         </li>
-{% else %}
-                <li class="nav-item">
+        {% else %}
+        <li class="nav-item">
             <a class="nav-link" href="{% url 'shop:cart_AnonymousUser' %}">Cart Anonymous User</a>
         </li>
         {% endif %}
+        <li>
 
+            <div class="container text-center">
+                <form id="search-form" method="GET" action="{% url 'search_products:search' %}">
+                    <input type="text" id="search-input" name="q" class="form-control" placeholder="Search products...">
+                    <div id="search-results" class="dropdown-menu" aria-labelledby="search-input"></div>
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </form>
+            </div>
+        </li>
     </ul>
 
     <div class="ml-auto">
@@ -60,6 +69,32 @@
 
 {% block main_content %}
 {% endblock %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    $('#search-form').submit(function(event) {
+        event.preventDefault(); // Предотвращаем отправку формы по умолчанию
+
+        var query = $('#search-input').val().trim(); // Получаем значение из поля ввода поиска
+        if (query !== '') {
+            $.ajax({
+                url: "{% url 'search_products:search' %}", // URL для отправки AJAX запроса
+                method: 'GET', // Метод запроса GET
+                data: {'q': query}, // Данные запроса (поисковой запрос)
+                success: function(response) {
+                    $('#search-results').html(response); // Обновляем содержимое страницы результатами поиска
+                },
+                error: function(xhr, errmsg, err) {
+                    // Обработка ошибок (если необходимо)
+                    console.log(xhr.status + ": " + xhr.responseText); // Выводим ошибку в консоль
+                }
+            });
+        }
+    });
+});
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"

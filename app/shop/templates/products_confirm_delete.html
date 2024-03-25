@@ -1,0 +1,15 @@
+<!-- shop/templates/shop/products_confirm_delete.html -->
+
+{% extends 'base.html' %}
+
+{% block main_content %}
+<div class="container">
+    <h2>Confirm Deletion</h2>
+    <p>Are you sure you want to delete "{{ object.name }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a href="{% url 'shop:list-products-link' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

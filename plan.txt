@@ -1,28 +1,24 @@
 1) Товары выбранные незалогиненным пользователем, после его регистрации и залогинивании должны быть у него в карзине
-
+2) сделать админку
+3) сделать "умный" поиск
+4) сделать фильтры
 
 later:
 -celary
 Переход сразу после регистрации
 Переадрисация после нажатия на ссылку активации (поздравления с регистрацией)
 admin
-удаление из карзины и добавление нескольких единиц товара
-зафиксировать вернее полее
-при создании супер юзера делать шифрование имени пользователя
+зафиксировать верхнее поле
 работа с my-profile (фото пользователя, поля для информации о пользователя, история покупок)
 
 
-Виталик:
-
-Добавить корзину без регистрации (можно добавлять товары без регистрации, 
-потом на странице покупки есть кнопка buy и если ты не зареган, 
-то тебя переносить на ссылку логина или регистрации)
 
 
+python manage.py shell
 from django.contrib.auth import get_user_model
 User = get_user_model()
 User.objects.create_superuser(email='vadym@gmail.com', username='vadym', password='vadym@gmail.com')
-
+exit()
 
 
 
@@ -42,9 +38,15 @@ User.objects.create_superuser(email='vadym@gmail.com', username='vadym', passwor
 
 файл 1: accounts/models.py
 
+from urllib import request
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.shortcuts import get_object_or_404
 
+from shop.models import Cart
+from shop.models import CartItem
+from shop.models import Products
 
 class OnlineShopUser(AbstractUser):
     USERNAME_FIELD = 'email'
@@ -66,6 +68,18 @@ class OnlineShopUser(AbstractUser):
             raise ValueError('Superuser must have is_superuser=True.')
 
         return self._create_user(email, password, username, **extra_fields)
+
+    def merge_carts(self, session_cart):
+        if session_cart:
+            for product_id, quantity in session_cart.items():
+                product = get_object_or_404(Products, pk=product_id)
+                cart, _ = Cart.objects.get_or_create(user_name=self)
+                cart_item, _ = CartItem.objects.get_or_create(cart=cart, product=product)
+                cart_item.quantity += quantity
+                cart_item.save()
+            del request.session['cart']
+            request.session.modified = True
+
 
 
 
@@ -239,8 +253,6 @@ urlpatterns = [
 
 
 файл 6: shop/views.py
-
-
 from django.views.generic import CreateView
 from django.views.generic import ListView
 from django.views.generic import DetailView
@@ -364,7 +376,6 @@ def remove_from_cart_AnonymousUser(request, cart_item_id):
             del cart[str(cart_item_id)]
             request.session.modified = True
     return redirect('shop:cart_AnonymousUser')
-
 
 
 файл 7: settings/settings.py
@@ -517,4 +528,86 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 AUTH_USER_MODEL = "accounts.OnlineShopUser"
 
 
+
+
+файл 7: accounts/views.py
+
+from django.contrib.auth.forms import AuthenticationForm
+from django.views.generic import DetailView
+from django.views.generic import CreateView
+from django.views.generic import RedirectView
+from accounts.models import OnlineShopUser
+from accounts.forms import SignUpForm
+from django.urls import reverse_lazy
+from django.shortcuts import get_object_or_404, render
+
+
+class MyProfileView(DetailView):
+    model = OnlineShopUser
+    template_name = 'my-profile.html'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.filter(id=self.request.user.id)
+        return queryset
+
+
+class SingUpView(CreateView):
+    model = OnlineShopUser
+    template_name = "sing_up.html"
+    success_url = reverse_lazy("home-link")
+    form_class = SignUpForm
+
+    def form_valid(self, form):
+        from django.contrib import messages
+        messages.info(self.request, 'Thank for sign up! Please, check email')
+        return super().form_valid(form)
+
+
+class ActivateView(RedirectView):
+    pattern_name = 'home-link'
+
+    def get_redirect_url(self, *args, **kwargs):
+        username = kwargs.pop("username")
+        user = get_object_or_404(OnlineShopUser, username=username, is_active=False)
+        user.is_active = True
+        from django.contrib import messages
+        user.save(update_fields=('is_active',))
+        messages.info(self.request, 'Your accaunts is activated')
+        user.refresh_from_db()
+        return super().get_redirect_url(*args, **kwargs)
+
+
+from django.contrib.auth import login, authenticate
+from django.shortcuts import redirect
+from django.urls import reverse_lazy
+
+from accounts.models import OnlineShopUser
+
+def signup(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            user.merge_carts(request.session.get('cart', {}))
+            return redirect('home-link')
+    else:
+        form = SignUpForm()
+    return render(request, 'signup.html', {'form': form})
+
+def login(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            user.merge_carts(request.session.get('cart', {}))
+            return redirect('home-link')
+    else:
+        form = AuthenticationForm()
+    return render(request, 'login.html', {'form': form})
 

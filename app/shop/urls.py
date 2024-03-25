@@ -5,6 +5,7 @@ from shop.views import ShopDetailsView
 from shop.views import add_to_cart
 from shop.views import add_to_cart_AnonymousUser
 from shop.views import view_cart
+from shop.views import ProductDeleteView
 from shop.views import view_cart_AnonymousUser
 from shop.views import remove_from_cart_AnonymousUser
 
@@ -24,4 +25,5 @@ urlpatterns = [
     path('remove_from_cart/<int:cart_item_id>/', remove_from_cart, name='remove_from_cart'),
     path('remove_from_cart_AnonymousUser/<int:cart_item_id>/', remove_from_cart_AnonymousUser,
          name='remove_from_cart_AnonymousUser'),
+    path('delete/<int:pk>/', ProductDeleteView.as_view(), name='delete-product'),
     ]
