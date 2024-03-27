@@ -8,6 +8,24 @@
           integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
     {% block style_content %}
     {% endblock %}
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#search-input').autocomplete({
+                source: "{% url 'search_products:autocomplete' %}",
+                minLength: 1,
+                select: function(event, ui) {
+                    $('#search-input').val(ui.item.value); // Заполнение поле ввода выбранным элементом
+                    $('#search-form').submit(); // Автоматическая отправка формы при выборе элемента из списка
+                }
+            });
+        });
+
+    </script>
 </head>
 <body>
 
@@ -39,7 +57,8 @@
 
             <div class="container text-center">
                 <form id="search-form" method="GET" action="{% url 'search_products:search' %}">
-                    <input type="text" id="search-input" name="q" class="form-control" placeholder="Search products...">
+                    <input type="text" id="search-input" name="q" class="form-control" placeholder="Search products..."
+                           autocomplete="off">
                     <div id="search-results" class="dropdown-menu" aria-labelledby="search-input"></div>
                     <button type="submit" class="btn btn-primary">Search</button>
                 </form>
@@ -70,35 +89,7 @@
 {% block main_content %}
 {% endblock %}
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-<script>
-$(document).ready(function() {
-    $('#search-form').submit(function(event) {
-        event.preventDefault(); // Предотвращаем отправку формы по умолчанию
-
-        var query = $('#search-input').val().trim(); // Получаем значение из поля ввода поиска
-        if (query !== '') {
-            $.ajax({
-                url: "{% url 'search_products:search' %}", // URL для отправки AJAX запроса
-                method: 'GET', // Метод запроса GET
-                data: {'q': query}, // Данные запроса (поисковой запрос)
-                success: function(response) {
-                    $('#search-results').html(response); // Обновляем содержимое страницы результатами поиска
-                },
-                error: function(xhr, errmsg, err) {
-                    // Обработка ошибок (если необходимо)
-                    console.log(xhr.status + ": " + xhr.responseText); // Выводим ошибку в консоль
-                }
-            });
-        }
-    });
-});
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-        crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
         crossorigin="anonymous"></script>
