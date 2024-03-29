@@ -7,8 +7,13 @@ from accounts.models import OnlineShopUser
 class Products(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=50)
-    car_brand = models.CharField(max_length=50)
     price = models.DecimalField(max_digits=6, decimal_places=2)
+    car_brand = models.CharField(max_length=50)
+    car_model = models.CharField(max_length=50)
+    car_body_type = models.CharField(max_length=50)
+    car_engine_type = models.CharField(max_length=50)
+    car_engine_modification = models.CharField(max_length=50)
+
     image = models.ImageField(upload_to='images/')
 
     def get_absolute_url(self):

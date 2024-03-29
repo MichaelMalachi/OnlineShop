@@ -5,7 +5,6 @@
     <form method="post" action="{% url 'shop:create-product-link' %}" enctype="multipart/form-data">
         {% csrf_token %}
 
-
         <div class="row">
             <div class="col-md-6 offset-md-3">
                 <p>
@@ -24,12 +23,52 @@
                 </p>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <p>
+                    <label for="id_car_brand">Сar brand:</label>
+                    <input type="text" name="car_brand" maxlength="50" required id="id_car_brand"
+                           class="form-control">
+                </p>
+            </div>
+        </div>
+
 
         <div class="row">
             <div class="col-md-6 offset-md-3">
                 <p>
-                    <label for="id_car_brand">car_brand:</label>
-                    <input type="text" name="car_brand" maxlength="50" required id="id_car_brand"
+                    <label for="id_car_model">Сar model:</label>
+                    <input type="text" name="car_model" maxlength="50" required id="id_car_model"
+                           class="form-control">
+                </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <p>
+                    <label for="id_car_body_type">Сar body type:</label>
+                    <input type="text" name="car_body_type" maxlength="50" required id="id_car_body_type"
+                           class="form-control">
+                </p>
+            </div>
+        </div>
+
+                <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <p>
+                    <label for="id_car_engine_type">Сar engine type:</label>
+                    <input type="text" name="car_engine_type" maxlength="50" required id="id_car_engine_type"
+                           class="form-control">
+                </p>
+            </div>
+        </div>
+
+                       <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <p>
+                    <label for="id_car_engine_modification">Сar engine modification:</label>
+                    <input type="text" name="car_engine_modification" maxlength="50" required id="id_car_engine_modification"
                            class="form-control">
                 </p>
             </div>
